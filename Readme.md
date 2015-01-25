@@ -13,5 +13,5 @@ RUNNING
 
 >##python mange.py runserver
 
-**Note If Mysql doesn't show up or fails, import schema.sql in your databse
+**Note If Databse tabels don't show up or python manage.py migrate fails, import schema.sql in your databse
 
