@@ -69,7 +69,7 @@ def test(request):
 
 @auth_check
 def index(request):
-    return render(request,'home.html')
+    return render(request,'timeline.html')
 
 @auth_check
 def home(request):
