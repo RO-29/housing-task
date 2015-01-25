@@ -96,7 +96,7 @@ def get_handle(uid):
      
     DB =DB_Obj()
     cursor = DB.cursor()
-    query = 'Select handle from users WHERE uid= %s'%uid
+    query = "SELECT * FROM users WHERE uid='%s'" %uid
     cursor.execute(query)
     rows = cursor.fetchall()
     DB.commit()
@@ -107,12 +107,12 @@ def get_uid(handle):
      
     DB =DB_Obj()
     cursor = DB.cursor()
-    query = 'Select uid from users WHERE handle= %s'%handle
+    query = "SELECT * FROM users WHERE handle='%s'" %handle
     cursor.execute(query)
     rows = cursor.fetchall()
     DB.commit()
     DB.close()
-    return rows
+    return rows[0][0]
 
 def get_user(uid):
     DB =DB_Obj()
@@ -124,10 +124,23 @@ def get_user(uid):
     DB.close()
     return rows
 
-def follows_u(uid):
+def follows_u(request,uid):
     DB =DB_Obj()
     cursor = DB.cursor()
-    query = 'Select * from followers WHERE uid_id= %s AND follwer_id=%s  '%(request.session['uid'],uid)
+    query = "SELECT * FROM followers WHERE follower_id='%s' AND uid_id='%s'" %(uid,request.session['uid'])
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    DB.commit()
+    DB.close()
+    if rows: 
+        return True
+    else:
+        return False
+
+def u_follow(request,uid):
+    DB =DB_Obj()
+    cursor = DB.cursor()
+    query = "SELECT * FROM following WHERE following_id='%s' AND uid_id='%s'" %(uid,request.session['uid'])
     cursor.execute(query)
     rows = cursor.fetchall()
     DB.commit()
@@ -141,7 +154,7 @@ def get_tweets(uid):
      
     DB =DB_Obj()
     cursor = DB.cursor()
-    query = 'Select * from tweets WHERE uid_id= %s'%uid
+    query = "SELECT * FROM tweets WHERE uid_id='%s'" %uid
     cursor.execute(query)
     rows = cursor.fetchall()
     DB.commit()
@@ -165,8 +178,6 @@ def index(request):
 @csrf_exempt
 def get_tweets_timeline(request):
  response={}
- DB =DB_Obj()
- response={} 
  tweets=[]
  total_followers = get_followers(request.session['uid'])
  print total_followers[0][1]
@@ -185,18 +196,21 @@ def get_tweets_timeline(request):
   resp['handle']= get_handle(tweet[3])
   response[i]=resp
   i+=1
- DB.commit()
- DB.close() 
  return HttpResponse(json.dumps(response), content_type="application/json") 
 
 @csrf_exempt
 def other_user(request):
+   DB = DB_Obj()
+   cursor = DB.cursor() 
    response={} 
    tweets={}
-   handle = request.POST.get('user')
+   handle ='rohit29'
+   #handle = request.POST.get('user')
    uid = get_uid(handle)
    tweets_all = get_tweets(uid)
+   print tweets_all
    query = 'Select * from tweets WHERE uid_id= %s'%uid
+   print query
    cursor.execute(query)
    rows = cursor.fetchall()
    rows = sorted(rows, key=lambda p: p[1], reverse=True)
@@ -212,11 +226,11 @@ def other_user(request):
 	  i+=1
    DB.commit()
    DB.close()
-   user = get_user(uid)
+   user = get_user(uid)[0]
    following_count = get_following_count(uid) 
-   following_count = get_followers_count(uid)
+   followers_count = get_followers_count(uid)
    
-   response['userDetails']={'name':user[1]+user[2],'about':user[7],'followers':followers_count,'following':following_count,'count':['tweet_count'],'handle':handle,"fl_u":follows_u(uid)}
+   response['userDetails']={'name':user[1]+" "+user[2],'about':user[6],'followers':followers_count,'following':following_count,'count':i+1,'handle':handle,"fl_u":u_follow(request,uid)}
    return HttpResponse(json.dumps(response), content_type="application/json")  
 #gets Current user tweets and return response conataining formatted data
 @csrf_exempt
@@ -254,7 +268,8 @@ def profile(request):
 #Anonumous function, used for testing
 def test(request):
  response={}
- query = 'Select uid from users WHERE handle= %s'%handle
+ query = "SELECT * FROM users WHERE handle='%s'" %'rohit29'
+ print query
  DB = DB_Obj()
  cursor = DB.cursor()
  cursor.execute(query)
