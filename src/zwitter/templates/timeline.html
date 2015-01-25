@@ -9,63 +9,43 @@
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-2.1.1.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
   <script src="{{ STATIC_URL }}js/validate.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+ $.ajax({
+          type: "POST",
+            url: "/timeline_tweets/",
+            success: function(html){
+                  console.log(html)
+                 //alert(0 in html)
+                  if(0 in html)
+                   $("#not").html('')
+                  for (a in html){
+ if(a!='userDetails'){
+
+  $('#tl').append('<article class="timeline-entry"><div class="timeline-entry-inner"><div class="timeline-icon bg-success"><i class="entypo-feather"></i></div><div class="timeline-label"><h2><a href="/profile">'+html[a].name+' </a> <span>'+html[a].time+'</h2><p>'+html[a].msg+'</p></div></div></article>')
+ }
+}
+  } 
+         })
+
+
+})
+</script>
+
 <body>
 
       {% include "fixed_navbar.html" %} 
-<div class="container">
+ <div class="container">
 
 
      {% include "tweet_box.html" %}
-
+	<div class="container">
 	<div class="row">
-    
-        <div class="timeline-centered">
-
-        <article class="timeline-entry">
-
-            <div class="timeline-entry-inner">
-
-                <div class="timeline-icon bg-success">
-                    <i class="entypo-feather"></i>
-                </div>
-
-                <div class="timeline-label">
-                    <h2><a href="#">Art Ramadani</a> <span>posted a status update</span></h2>
-                    <p>Tolerably earnestly middleton extremely distrusts she boy now not. Add and offered prepare how cordial two promise. Greatly who affixed suppose but enquire compact prepare all put. Added forth chief trees but rooms think may.</p>
-                </div>
-            </div>
-
-        </article>
-
-
-        <article class="timeline-entry">
-
-            <div class="timeline-entry-inner">
-
-                <div class="timeline-icon bg-secondary">
-                    <i class="entypo-suitcase"></i>
-                </div>
-
-                <div class="timeline-label">
-
-                    <h2><a href="#">Job Meeting</a></h2>
-                    <p>You have a meeting at <strong>Laborator Office</strong> Today.</p>
-                </div>
-            </div>
-
-        </article>
-
-        <article class="timeline-entry begin">
-
-            <div class="timeline-entry-inner">
-
-                <div class="timeline-icon" style="-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg);">
-                    <i class="entypo-flight"></i> +
-                </div>
-
-            </div>
-
-        </article>
+         <div id ="not">No Tweets</div>
+        <div id = "tl" class="timeline-centered">
+       
+              
 
     </div>
 

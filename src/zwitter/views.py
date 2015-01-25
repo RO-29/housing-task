@@ -133,7 +133,7 @@ def get_tweets_timeline(request):
  i=0
  for tweet in tweets:
   resp = {}
-  timestamp = str(tweet[1].date())+"/"+str(tweet[1].time())
+  timestamp = str(tweet[1].time())+"  "+str(tweet[1].date())
   name = request.session['name']
   resp['msg'] = tweet[2]
   resp['time']=timestamp
@@ -158,7 +158,7 @@ def get_tweets_me(request):
  i=0
  for row in rows:
   tweet = {}
-  timestamp = str(row[1].date())+"/"+str(row[1].time())
+  timestamp = str(row[1].time())+"  "+str(row[1].date())
   name = request.session['name']
   tweet['msg'] = row[2]
   tweet['time']=timestamp
@@ -241,7 +241,7 @@ def tweet_post(request):
          DB = DB_Obj() 
          cursor = DB.cursor()
          query = """INSERT INTO tweets (posted,tweet,uid_id) VALUES(%s,%s,%s)""" 
-         params = (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),tweet,int(request.session['uid']))
+         params = (datetime.datetime.now().strftime(' %H:%M:%S %d-%m-%Y'),tweet,int(request.session['uid']))
          cursor.execute(query,params)
          DB.commit()
 	 DB.close()

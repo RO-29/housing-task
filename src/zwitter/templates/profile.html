@@ -17,8 +17,9 @@ $(document).ready(function(){
             url: "/me_tweets/",
             success: function(html){
                   console.log(html)
-                  if(html.lentgh>1)
-                       $("#not").html('')
+                 //alert(0 in html)
+                  if(0 in html)
+                   $("#not").html('')
                   for (a in html){
  if(a!='userDetails'){
 
@@ -32,8 +33,6 @@ $(document).ready(function(){
         $('#total').append(html['userDetails'].count+" tweets")
                 } 
          })
-
-
 })
 
 </script>
@@ -46,7 +45,7 @@ $(document).ready(function(){
      {% include "tweet_box.html" %}
      {% include "about.html" %}
 	<div class="row">
-         <div id ="not">No Tweets</p>
+         <div id ="not">No Tweets</div>
         <div id = "tl" class="timeline-centered">
        
               
