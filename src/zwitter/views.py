@@ -60,8 +60,9 @@ def get_tweets_me(request):
 def profile(request):
  return render(request,'profile.html')
 
-def test(request):
+def test(request,user_name):
  response={}
+ response[1]=user_name
  return HttpResponse(json.dumps(response), content_type="application/json")  
 
 @auth_check
