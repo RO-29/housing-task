@@ -414,7 +414,7 @@ def unfollow(request):
  DB.close()
  DB = DB_Obj()
  cursor = DB.cursor()
- query = "DELETE FROM followers WHERE follower_id='%s' AND uid_id='%s'"%(uuid,uid) 
+ query = "DELETE FROM followers WHERE follower_id='%s' AND uid_id='%s'"%(uid,uuid) 
  cursor.execute(query)
  DB.commit()
  DB.close()

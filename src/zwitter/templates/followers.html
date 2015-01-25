@@ -16,7 +16,7 @@ $(document).ready(function(){
      url='/follow/'
    else
      url = '/unfollow/'
-   alert(url+"\n"+document.URL.split('/')[3])
+   //alert(url+"\n"+document.URL.split('/')[3])
    $.ajax({
             type: "POST",
             data:{'handle':document.URL.split('/')[3]},   
