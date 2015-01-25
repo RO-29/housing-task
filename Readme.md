@@ -19,7 +19,7 @@ RUNNING
 
 **Note If Database tabels don't show up or python manage.py migrate fails, import schema.sql in your databse
 
-**Also read the note.md file for used library
+**Also read the note.md file for general instructions
 
 
 Problem_statement
