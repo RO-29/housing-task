@@ -103,6 +103,39 @@ def get_handle(uid):
     DB.close()
     return rows
 
+def get_uid(handle):
+     
+    DB =DB_Obj()
+    cursor = DB.cursor()
+    query = 'Select uid from users WHERE handle= %s'%handle
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    DB.commit()
+    DB.close()
+    return rows
+
+def get_user(uid):
+    DB =DB_Obj()
+    cursor = DB.cursor()
+    query = 'Select * from users WHERE uid= %s'%uid
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    DB.commit()
+    DB.close()
+    return rows
+
+def follows_u(uid):
+    DB =DB_Obj()
+    cursor = DB.cursor()
+    query = 'Select * from followers WHERE uid_id= %s AND follwer_id=%s  '%(request.session['uid'],uid)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    DB.commit()
+    DB.close()
+    if rows: 
+        return True
+    else
+        return False
 
 def get_tweets(uid):
      
@@ -140,7 +173,6 @@ def get_tweets_timeline(request):
  for follower in total_followers:
       tweets+=get_tweets(follower[1])
 
-
  tweets = sorted(tweets, key=lambda p: p[1], reverse=True)
  i=0
  for tweet in tweets:
@@ -157,6 +189,35 @@ def get_tweets_timeline(request):
  DB.close() 
  return HttpResponse(json.dumps(response), content_type="application/json") 
 
+@csrf_exempt
+def other_user(request):
+   response={} 
+   tweets={}
+   handle = request.POST.get('user')
+   uid = get_uid(handle)
+   tweets_all = get_tweets(uid)
+   query = 'Select * from tweets WHERE uid_id= %s'%uid
+   cursor.execute(query)
+   rows = cursor.fetchall()
+   rows = sorted(rows, key=lambda p: p[1], reverse=True)
+   i=0
+   for row in rows:
+	  tweet = {}
+	  timestamp = str(row[1].time())+"  "+str(row[1].date())
+	  name = request.session['name']
+	  tweet['msg'] = row[2]
+	  tweet['time']=timestamp
+	  tweet['name']=name
+	  response[i]=tweet
+	  i+=1
+ DB.commit()
+ DB.close()
+   user = get_user(uid)
+   following_count = get_following_count(uid) 
+   following_count = get_followers_count(uid)
+   
+   response['userDetails']={'name':user[1]+user[2],'about':user[7],'followers':followers_count,'following':following_count,'count':['tweet_count'],'handle':handle,"fl_u":follows_u(uid)}
+ return HttpResponse(json.dumps(response), content_type="application/json")  
 #gets Current user tweets and return response conataining formatted data
 @csrf_exempt
 def get_tweets_me(request):
@@ -238,6 +299,10 @@ def login_signup(request):
     return render(request,'login.html')
    else:
     return HttpResponseRedirect('/')
+
+def user_profile(request):
+    return render(request,'user_profile.html')
+
 
 
 @csrf_exempt
