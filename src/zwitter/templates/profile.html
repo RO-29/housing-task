@@ -1,0 +1,46 @@
+{% load static from staticfiles %}
+<!DOCTYPE HTML>
+<head>
+ 
+  <title>Zwitter|Login</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-min.css">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css">
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+  <script src="{{ STATIC_URL }}js/validate.js"></script>
+<body>
+
+      {% include "fixed_navbar.html" %} 
+<div class="container">
+
+
+     {% include "tweet_box.html" %}
+
+	<div class="row">
+    
+        <div class="timeline-centered">
+        {% for tweet in tweets %}
+        <article class="timeline-entry">
+
+            <div class="timeline-entry-inner">
+
+                <div class="timeline-icon bg-success">
+                    <i class="entypo-feather"></i>
+                </div>
+
+                <div class="timeline-label">
+                    <h2><a href="/profile">{{ tweets[tweet].name }}</a> <span>{{tweets[tweet].time}}</span></h2>
+                    <p>{{tweets[tweet].msg}}
+                </div>
+            </div>
+
+        </article>
+        {% endfor %}
+
+    </div>
+
+    
+	</div>
+</div>
+</body>

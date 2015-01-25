@@ -34,23 +34,42 @@ def encode(password):
 #Index page , Serves as starting path for our app
 #We check if user is logged in or not ,decorator defined in auth.py
 
-
-def test(request):
+ 
+def get_tweets_me(request):
  DB =DB_Obj()
+ response={} 
+ tweets={}
  cursor = DB.cursor()
- query = 'Select * from tweets'
+ query = 'Select * from tweets WHERE uid_id= %s'%request.session['uid']
  cursor.execute(query)
  rows = cursor.fetchall()
- print rows
- response={} 
- DB.commit()
- DB.close()
- response['result']=True
- return HttpResponse(json.dumps(rows), content_type="application/json")  
+ rows = sorted(rows, key=lambda p: p[1], reverse=True)
+ i=0
+ for row in rows:
+  tweet = {}
+  timestamp = str(row[1].date())+"/"+str(row[1].time())
+  name = request.session['name']
+  tweet['msg'] = row[2]
+  tweet['time']=timestamp
+  tweet['name']=name
+  response[i]=tweet
+  i+=1
+ return (json.dumps(response))
+
+@auth_check
+def profile(request):
+ tweets = get_tweets_me(request)
+ print tweets
+ render(request,'profile.html',tweets)
+
+
+def test(request):
+ response={}
+ return HttpResponse(json.dumps(response), content_type="application/json")  
 
 @auth_check
 def index(request):
-    return render(request,'compose.html')
+    return render(request,'home.html')
 
 @auth_check
 def home(request):
