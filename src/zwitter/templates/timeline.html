@@ -1,0 +1,74 @@
+{% load static from staticfiles %}
+<!DOCTYPE HTML>
+<head>
+ 
+  <title>Zwitter|Login</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-min.css">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css">
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+  <script src="{{ STATIC_URL }}js/validate.js"></script>
+<body>
+
+
+<div class="container">
+
+     {% include "tweet_box.html" %}
+
+	<div class="row">
+    
+        <div class="timeline-centered">
+
+        <article class="timeline-entry">
+
+            <div class="timeline-entry-inner">
+
+                <div class="timeline-icon bg-success">
+                    <i class="entypo-feather"></i>
+                </div>
+
+                <div class="timeline-label">
+                    <h2><a href="#">Art Ramadani</a> <span>posted a status update</span></h2>
+                    <p>Tolerably earnestly middleton extremely distrusts she boy now not. Add and offered prepare how cordial two promise. Greatly who affixed suppose but enquire compact prepare all put. Added forth chief trees but rooms think may.</p>
+                </div>
+            </div>
+
+        </article>
+
+
+        <article class="timeline-entry">
+
+            <div class="timeline-entry-inner">
+
+                <div class="timeline-icon bg-secondary">
+                    <i class="entypo-suitcase"></i>
+                </div>
+
+                <div class="timeline-label">
+
+                    <h2><a href="#">Job Meeting</a></h2>
+                    <p>You have a meeting at <strong>Laborator Office</strong> Today.</p>
+                </div>
+            </div>
+
+        </article>
+
+        <article class="timeline-entry begin">
+
+            <div class="timeline-entry-inner">
+
+                <div class="timeline-icon" style="-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg);">
+                    <i class="entypo-flight"></i> +
+                </div>
+
+            </div>
+
+        </article>
+
+    </div>
+
+    
+	</div>
+</div>
+</body>

@@ -1,15 +1,4 @@
-{% load static from staticfiles %}
-<!DOCTYPE HTML>
-<head>
- 
-  <title>Zwitter|Timeline</title>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-min.css">
-  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-2.1.1.min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-  <script src="{{ STATIC_URL }}js/validate.js"></script>
-
- <script type="text/javascript">
+<script type="text/javascript">
   $(document).ready(function(){
     function clearForm()
     {
@@ -67,9 +56,7 @@
 
   })
  </script>
-</head>
-<body>
-
+<div class="container">
 	<div class="row">
             <form id="tweetform" accept-charset="UTF-8" action="" method="POST">
                 <textarea class="span4" id="tweet" name="tweet"
@@ -79,5 +66,4 @@
                 <span id= "tweet_result" style="margin-left:8px;"></span>                                     </div>
             </form>
 	</div>
-</body>
-</html>
+</div>

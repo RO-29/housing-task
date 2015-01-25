@@ -1,23 +1,21 @@
 from django.http import *
-from django.shortcuts import render, redirect
-import json
-import pdb
+from django.shortcuts import *
+
+from functools import wraps
 
 
-#User redirected to login page if not logged in
+#User redirected to login page if not logged in , since we are storing logged in our session object when user logged in
 
-def login_required(f):
-    
+#Wrap is not your dominos cheesy wrap ,Sigh!
+
+def auth_check(responseauth):
     def wrap(request,*args,**kwargs):
-
-        user_logged_in = request.session.get('logged_in',False)
-        
-        if user_logged_in:
-            return f(request, *args, **kwargs)
+        logged = request.session.get('logged',False)
+        if logged:
+            return responseauth(request, *args, **kwargs)
         else:
             return HttpResponseRedirect('/login')
-
-    wrap.__doc__ = f.__doc__
-    wrap.__name__ = f.__name__
+    wrap.__doc__ = responseauth.__doc__
+    wrap.__name__ = responseauth.__name__
     return wrap
 

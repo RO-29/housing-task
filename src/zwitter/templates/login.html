@@ -2,13 +2,162 @@
 <!DOCTYPE HTML>
 <head>
  
-  <title>Zwitter | Login</title>
+  <title>Zwitter|Login</title>
   <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}stylesheets/bootstrap-min.css">
-  <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery-2.1.1.min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}javascripts/bootstrap.min.js"></script>
-  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-min.css">
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+  <script src="{{ STATIC_URL }}js/validate.js"></script>
+  <script type="text/javascript">
+  
+  $(document).ready(function(){
+    function clearForm()
+    {
+    $(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');
+    $(':checkbox, :radio').prop('checked', false);
+    }
+
+    //We validate the user by validate.js library, for bith signgup and login
+     $('#loginform').validate({
+      rules:{
+            loginhandle: {
+                minlength: 3,
+                maxlength: 250,
+                required: true
+            },
+            loginpassword: {
+                minlength: 3,
+                maxlength: 100,
+                required: true
+            }
+        },
+        highlight: function(element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        unhighlight: function(element) {
+            $(element).closest('.form-group').removeClass('has-error');
+        },
+        submitHandler: function(form) {
+
+        $("#result_login").html("")
+        val = {
+		'loginhandle':$('#loginhandle').val(),
+                'loginpassword':$('#loginpassword').val()
+	      }
+
+        console.log(val)
+        //Ajax trigger to our backend to process login form
+         $.ajax({
+          type: "POST",
+            url: "/login_process/",
+            data:val,
+            success: function(html){
+                  console.log(html)
+                  if (html.result=="failed"){
+                     $("#result_login").html("<font color='red'>"+html.message+"</font>")}
+                  else{
+                     $("#result_login").html("<font color='green'>"+html.message+"</font>")
+                     document.location="http://localhost:8000"
+                    }
+            }
+         })
+	return false;
+     },
+        errorElement: 'span',
+        errorClass: 'help-block',
+        errorPlacement: function(error, element) {
+            if(element.parent('.input-group').length) {
+                error.insertAfter(element.parent());
+            } else {
+                error.insertAfter(element);
+            }
+        }
+    
+    })
+    $('#signupform').validate({
+        rules: {
+            fname: {
+                minlength: 3,
+                maxlength: 250,
+                required: true
+            },
+            about: {
+                minlength: 50,
+                maxlength: 500,
+                required: true
+            },
+            handle: {
+                minlength: 3,
+                maxlength: 100,
+                required: true
+            },
+            password: {
+                minlength: 5,
+                maxlength: 250,
+                required: true
+            },
+            lname: {
+                minlength: 3,
+                maxlength: 250,
+                required: true
+            },
+            email:{
+                    email: true,
+                    required: true
+                  }
+        },
+        highlight: function(element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        unhighlight: function(element) {
+            $(element).closest('.form-group').removeClass('has-error');
+        },
+        submitHandler: function(form) {
+         
+        $("#result").html("")
+        val = {
+		'fname':$('#fname').val(),
+                'lname':$('#lname').val(),
+		'email':$('#email').val(),
+		'password':$('#password').val(),
+		'handle':$('#handle').val(),
+                'about':$('#about').val()
+	      }
+        console.log(val)
+                //Ajax trigger to our backend to process signup form
+        $.ajax({
+          type: "POST",
+            url: "/register/",
+            data:val,
+            success: function(html){
+                  console.log(html)
+                  if (html.result=="failed")
+                     $("#result").html("<font color='red'>"+html.message+"</font>")
+                  else{
+                     $("#result").html("<font color='green'>"+html.message+"</font>")
+                     $("#signpform").trigger('reset'); 
+                     clearForm()
+                     }
+            }
+         })
+	return false;
+     },
+        errorElement: 'span',
+        errorClass: 'help-block',
+        errorPlacement: function(error, element) {
+            if(element.parent('.input-group').length) {
+                error.insertAfter(element.parent());
+            } else {
+                error.insertAfter(element);
+            }
+        }
+    });
+})
+ </script>
 </head>
+
+<!-- Below Bootstrap heaven!  !-->
+
 <body>
   
   <div class="container">    
@@ -27,12 +176,12 @@
                                     
                             <div style="margin-bottom: 25px" class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input id="login-username" type="text" class="form-control" name="username" value="" placeholder="username or email">                                        
+                                        <input id="loginhandle" type="text" class="form-control" name="loginhandle" value="" placeholder="Enter your zwitter handle">                                        
                                     </div>
                                 
                             <div style="margin-bottom: 25px" class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                        <input id="login-password" type="password" class="form-control" name="password" placeholder="password">
+                                        <input id="loginpassword" type="password" class="form-control" name="loginpassword" placeholder="password">
                                     </div>
                                     
 
@@ -50,7 +199,8 @@
                                     <!-- Button -->
 
                                     <div class="col-sm-12 controls">
-                                      <a id="btn-login" href="#" class="btn btn-success">Login  </a>
+                                      <input id="btn-login" type="submit" value="Login" class="btn btn-success">
+                                      <span id= "result_login" style="margin-left:8px;"></span>                                     </div>
                                       <!--<a id="btn-fblogin" href="#" class="btn btn-primary">Login with Facebook</a>!-->
 
                                     </div>
@@ -155,93 +305,6 @@
                 
          </div> 
     </div>
- <script type="text/javascript">
-  $(document).ready(function(){
 
-      function clearForm()
-    {
-    $(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');
-    $(':checkbox, :radio').prop('checked', false);
-    }
-
-      $('#signupform').validate({
-        rules: {
-            fname: {
-                minlength: 3,
-                maxlength: 250,
-                required: true
-            },
-            about: {
-                minlength: 50,
-                maxlength: 500,
-                required: true
-            },
-            handle: {
-                minlength: 3,
-                maxlength: 100,
-                required: true
-            },
-            password: {
-                minlength: 5,
-                maxlength: 250,
-                required: true
-            },
-            lname: {
-                minlength: 3,
-                maxlength: 250,
-                required: true
-            },
-            email:{
-                    email: true,
-                    required: true
-                  }
-        },
-        highlight: function(element) {
-            $(element).closest('.form-group').addClass('has-error');
-        },
-        unhighlight: function(element) {
-            $(element).closest('.form-group').removeClass('has-error');
-        },
-        submitHandler: function(form) {
-
-        $("#result").html("")
-        val = {
-		'fname':$('#fname').val(),
-                'lname':$('#lname').val(),
-		'email':$('#email').val(),
-		'password':$('#password').val(),
-		'handle':$('#handle').val(),
-                'about':$('#about').val()
-	      }
-        console.log(val)
-        $.ajax({
-          type: "POST",
-            url: "/register/",
-            data:val,
-            success: function(html){
-                  console.log(html)
-                  if (html.result=="failed")
-                     $("#result").html("<font color='red'>"+html.message+"</font>")
-                  else{
-                     $("#result").html("<font color='green'>"+html.message+"</font>")
-                     $("#signpform").trigger('reset'); 
-                     clearForm()
-                     }
-            }
-         })
-	return false;
-     },
-        errorElement: 'span',
-        errorClass: 'help-block',
-        errorPlacement: function(error, element) {
-            if(element.parent('.input-group').length) {
-                error.insertAfter(element.parent());
-            } else {
-                error.insertAfter(element);
-            }
-        }
-    });
-})
- </script>
  </body>
 </html>   
