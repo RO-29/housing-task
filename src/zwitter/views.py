@@ -92,6 +92,18 @@ def get_followers(uid):
     DB.close()
     return rows 
 
+def get_handle(uid):
+     
+    DB =DB_Obj()
+    cursor = DB.cursor()
+    query = 'Select handle from users WHERE uid= %s'%uid
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    DB.commit()
+    DB.close()
+    return rows
+
+
 def get_tweets(uid):
      
     DB =DB_Obj()
@@ -137,7 +149,8 @@ def get_tweets_timeline(request):
   name = request.session['name']
   resp['msg'] = tweet[2]
   resp['time']=timestamp
-  resp['name']=name
+  resp['name']=name 
+  resp['handle']= get_handle(tweet[3])
   response[i]=resp
   i+=1
  DB.commit()
@@ -167,7 +180,7 @@ def get_tweets_me(request):
   i+=1
  DB.commit()
  DB.close()
- response['userDetails']={'name':request.session['name'],'about':request.session['about'],'followers':request.session['followers'],'following':request.session['following'],'count':request.session['tweet_count']}
+ response['userDetails']={'name':request.session['name'],'about':request.session['about'],'followers':request.session['followers'],'following':request.session['following'],'count':request.session['tweet_count'],'handle':request.session['handle']}
  return HttpResponse(json.dumps(response), content_type="application/json")  
 
 

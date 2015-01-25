@@ -23,7 +23,7 @@ $(document).ready(function(){
                   for (a in html){
  if(a!='userDetails'){
 
-  $('#tl').append('<article class="timeline-entry"><div class="timeline-entry-inner"><div class="timeline-icon bg-success"><i class="entypo-feather"></i></div><div class="timeline-label"><h2><a href="/profile">'+html[a].name+' </a> <span>'+html[a].time+'</h2><p>'+html[a].msg+'</p></div></div></article>')
+  $('#tl').append('<article class="timeline-entry"><div class="timeline-entry-inner"><div class="timeline-icon bg-success"><i class="entypo-feather"></i></div><div class="timeline-label"><h2><a href="/user/'+html[a].handle+'">'+html[a].name +'(<u>'+html[a].handle+'</u>)</a> <span>'+html[a].time+'</h2><p>'+html[a].msg+'</p></div></div></article>')
  }
 }
   } 

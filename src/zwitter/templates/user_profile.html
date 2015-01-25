@@ -14,7 +14,7 @@ $(document).ready(function(){
 
  $.ajax({
           type: "POST",
-            url: "/me_tweets/",
+            url: "/other_user",
             success: function(html){
                   console.log(html)
                  //alert(0 in html)
@@ -23,14 +23,15 @@ $(document).ready(function(){
                   for (a in html){
  if(a!='userDetails'){
 
-  $('#tl').append('<article class="timeline-entry"><div class="timeline-entry-inner"><div class="timeline-icon bg-success"><i class="entypo-feather"></i></div><div class="timeline-label"><h2><a href="/user/'+html['userDetails'].handle+'">'+html[a].name +'(<u>'+html['userDetails'].handle+'</u>)</a> <span>'+html[a].time+'</h2><p>'+html[a].msg+'</p></div></div></article>')
+  $('#tl').append('<article class="timeline-entry"><div class="timeline-entry-inner"><div class="timeline-icon bg-success"><i class="entypo-feather"></i></div><div class="timeline-label"><h2><a href="/profile">'+html[a].name+' </a> <span>'+html[a].time+'</h2><p>'+html[a].msg+'</p></div></div></article>')
  }
 }
         $('#followers').append(html['userDetails'].followers+" followers")
         $('#following').append(html['userDetails'].following+" following")
-        $('#nm').append(html['userDetails'].name + " (<u>"+html['userDetails'].handle+"</u>)")
+        $('#nm').append(html['userDetails'].name)
         $('#bio').append(html['userDetails'].bio)
         $('#total').append(html['userDetails'].count+" tweets")
+   
                 } 
          })
 })
@@ -40,17 +41,11 @@ $(document).ready(function(){
 
       {% include "fixed_navbar.html" %} 
 <div class="container">
-
-
-     {% include "tweet_box.html" %}
      {% include "about.html" %}
 	<div class="row">
          <div id ="not">No Tweets</div>
         <div id = "tl" class="timeline-centered">
-       
-              
-
-    </div>
+        </div>
 
     
 	</div>
