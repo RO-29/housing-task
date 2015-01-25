@@ -5,7 +5,7 @@ Housing_task
 
 RUNNING
 ====================================
->Mysql Databse settings--> src/zwitter/config.py (Change according to your databse settings, else it will fail )
+>Mysql Databse settings--> src/zwitter/config.py (Change according to your databse settings, else mysql commands will fail due to auth error)
 
 >sudo pip install -r requirements.txt
 
