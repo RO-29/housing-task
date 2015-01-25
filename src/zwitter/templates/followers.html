@@ -1,0 +1,92 @@
+{% load static from staticfiles %}
+<!DOCTYPE HTML>
+<head>
+ 
+  <title>Zwitter|followers</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-min.css">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css">
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+  <script src="{{ STATIC_URL }}js/validate.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+ $.ajax({
+            type: "POST",
+            data:{'user':document.URL.split('/')[3]},
+            url: "/other_user/",
+            success: function(html){
+                  console.log(html)
+                 //alert(0 in html)
+                  if(0 in html)
+                   $("#not").html('')
+                  for (a in html){
+ if(a!='userDetails'){
+
+ 
+  $('#tl').append('<article class="timeline-entry"><div class="timeline-entry-inner"><div class="timeline-icon bg-success"><i class="entypo-feather"></i></div><div class="timeline-label"><h2><a href="/profile">'+html[a].name+' </a> <span>'+html[a].time+'</h2><p>'+html[a].msg+'</p></div></div></article>')
+ }
+}
+        $('#followers').append(html['userDetails'].followers+" followers")
+        $('#following').append(html['userDetails'].following+" following")
+        $('#nm').append(html['userDetails'].name)
+        $('#bio').append(html['userDetails'].about)
+        $('#total').append(html['userDetails'].count+" tweets")
+        if (html['userDetails'].fl_u==true)
+          $('#fl').append("UnFollow")
+        else
+         $('#fl').append("Follow")
+   
+                } 
+         })
+})
+
+</script>
+<body>
+
+      {% include "fixed_navbar.html" %} 
+<div class="container">
+     {% include "about.html" %}
+	
+	<div class="row">
+		<ul class="listrap">
+            <li>
+                <div class="listrap-toggle">
+                    <span></span>
+                    <img src="http://lorempixel.com/60/60/people/?v=1" class="img-circle" />
+                </div>
+                <strong>My Lorem Option #1</strong>
+            </li>
+            <li class="active">
+                <div class="listrap-toggle">
+                    <span></span>
+                    <img src="http://lorempixel.com/60/60/people/?v=2" class="img-circle" />
+                </div>
+                <strong>Your Ipsum Option #2</strong>
+            </li>
+            <li class="active">
+                <div class="listrap-toggle">
+                    <span></span>
+                    <img src="http://lorempixel.com/60/60/people/?v=3" class="img-circle" />
+                </div>
+                <strong>Their Consectuer Option #3</strong>
+            </li>
+            <li>
+                <div class="listrap-toggle">
+                    <span></span>
+                    <img src="http://lorempixel.com/60/60/people/?v=4" class="img-circle" />
+                </div>
+                <strong>His Adjascent Option #4</strong>
+            </li>
+            <li class="active">
+                <div class="listrap-toggle">
+                    <span></span>
+                    <img src="http://lorempixel.com/60/60/people/?v=5" class="img-circle" />
+                </div>
+                <strong>Her Split Option #5</strong>
+            </li>
+        </ul>
+	</div>
+</div>
+</body>

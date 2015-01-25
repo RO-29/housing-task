@@ -280,6 +280,9 @@ def test(request):
 
 
 
+@auth_check
+def followers_render(request,handle):
+  return render(request,'followers.html')
 
 @auth_check
 def home(request):
