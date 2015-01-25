@@ -134,7 +134,7 @@ def follows_u(uid):
     DB.close()
     if rows: 
         return True
-    else
+    else:
         return False
 
 def get_tweets(uid):
@@ -210,14 +210,14 @@ def other_user(request):
 	  tweet['name']=name
 	  response[i]=tweet
 	  i+=1
- DB.commit()
- DB.close()
+   DB.commit()
+   DB.close()
    user = get_user(uid)
    following_count = get_following_count(uid) 
    following_count = get_followers_count(uid)
    
    response['userDetails']={'name':user[1]+user[2],'about':user[7],'followers':followers_count,'following':following_count,'count':['tweet_count'],'handle':handle,"fl_u":follows_u(uid)}
- return HttpResponse(json.dumps(response), content_type="application/json")  
+   return HttpResponse(json.dumps(response), content_type="application/json")  
 #gets Current user tweets and return response conataining formatted data
 @csrf_exempt
 def get_tweets_me(request):
@@ -252,31 +252,16 @@ def profile(request):
 
 
 #Anonumous function, used for testing
-def test(request,user_name):
+def test(request):
  response={}
- DB =DB_Obj()
- response={} 
- tweets=[]
- total_followers = get_followers(request.session['uid'])
- print total_followers[0][1]
- for follower in total_followers:
-      tweets+=get_tweets(follower[1])
-
-
- tweets = sorted(tweets, key=lambda p: p[1], reverse=True)
- i=0
- for tweet in tweets:
-  resp = {}
-  timestamp = str(tweet[1].date())+"/"+str(tweet[1].time())
-  name = request.session['name']
-  resp['msg'] = tweet[2]
-  resp['time']=timestamp
-  resp['name']=name
-  response[i]=resp
-  i+=1
+ query = 'Select uid from users WHERE handle= %s'%handle
+ DB = DB_Obj()
+ cursor = DB.cursor()
+ cursor.execute(query)
+ rows = cursor.fetchall()
  DB.commit()
  DB.close() 
- return HttpResponse(json.dumps(response), content_type="application/json") 
+ return HttpResponse(json.dumps(rows), content_type="application/json") 
 
 
 
@@ -300,7 +285,8 @@ def login_signup(request):
    else:
     return HttpResponseRedirect('/')
 
-def user_profile(request):
+@auth_check
+def user_profile(request,handle):
     return render(request,'user_profile.html')
 
 

@@ -14,8 +14,8 @@ $(document).ready(function(){
 
  $.ajax({
             type: "POST",
-            data:{'user:'+document.URL.split('/')[4]}
-            url: "/other_user",
+            data:{'user':document.URL.split('/')[4]},
+            url: "/other_user/",
             success: function(html){
                   console.log(html)
                  //alert(0 in html)
@@ -32,7 +32,7 @@ $(document).ready(function(){
         $('#nm').append(html['userDetails'].name)
         $('#bio').append(html['userDetails'].bio)
         $('#total').append(html['userDetails'].count+" tweets")
-        if html['userDetails'].fl_u==true
+        if (html['userDetails'].fl_u==true)
           $('#fl').append("UnFollow")
         else
          $('#fl').append("Follow")
