@@ -9,6 +9,8 @@ RUNNING
 
 >sudo pip install -r requirements.txt
 
+>cd src
+
 >python manage.py migrate
 
 >python mange.py runserver
