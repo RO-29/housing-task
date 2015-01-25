@@ -7,6 +7,8 @@ admin.autodiscover()
 urlpatterns = patterns('zwitter.views',
     url(r'^$','index'),
     url(r'^me/','profile'),
+    url(r'^follow/','follow'),
+    url(r'^unfollow/','unfollow'),
     url(r'^user/(?P<handle>\w+)','user_profile'),
     url(r'^(?P<handle>\w+)/followers/','followers_render'),
     url(r'^(?P<handle>\w+)/following','following_render'),

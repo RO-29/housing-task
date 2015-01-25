@@ -355,7 +355,55 @@ def login_signup(request):
 def user_profile(request,handle):
     return render(request,'user_profile.html')
 
+@csrf_exempt
+@auth_check
+def follow(request):
+ handle = request.GET.get('handle')
+ uid = request.session['uid']
+ uuid = get_uid(handle)
 
+ DB = DB_Obj()
+ cursor = DB.cursor()
+ query = """INSERT INTO following (since,following_id,uid_id) VALUES(%s,%s,%s)""" 
+ params = (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),uuid,uid)
+ cursor.execute(query,params)
+ DB.commit()
+ DB.close()
+ DB = DB_Obj()
+ cursor = DB.cursor()
+ query = """INSERT INTO followers (since,follower_id,uid_id) VALUES(%s,%s,%s)""" 
+ params = (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),uid,uuid)
+ cursor.execute(query,params)
+ DB.commit()
+ DB.close()
+ response={}
+ response ['success']= True
+ 
+ return HttpResponse(json.dumps(response), content_type="application/json")
+
+@csrf_exempt
+@auth_check
+def unfollow(request):
+ response={}
+ handle = request.GET.get('handle')
+ uid = request.session['uid']
+ uuid = get_uid(handle)
+
+ DB = DB_Obj()
+ cursor = DB.cursor()
+ query = "DELETE FROM following WHERE uuid='%s' AND uid='%s'"%(uuid,uid) 
+ cursor.execute(query)
+ DB.commit()
+ DB.close()
+ DB = DB_Obj()
+ cursor = DB.cursor()
+ query = "DELETE FROM followers WHERE uuid='%s' AND uid='%s'"%(uuid,uid) 
+ cursor.execute(query)
+ DB.commit()
+ DB.close()
+ response ['success']= True
+ 
+ return HttpResponse(json.dumps(response), content_type="application/json")
 
 @csrf_exempt
 @auth_check
