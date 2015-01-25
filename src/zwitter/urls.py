@@ -6,7 +6,9 @@ admin.autodiscover()
 #the url pattern ,user is served according to requested url from views.py and template directory
 urlpatterns = patterns('zwitter.views',
     url(r'^$','index'),
-     url(r'^profile/','profile'),
+    url(r'^profile/','profile'),
+    url(r'^me_tweets/','get_tweets_me'),
+   
     url(r'^test/','test'),
     url(r'^home/','home'),
     url(r'^tweet_post/','tweet_post'),

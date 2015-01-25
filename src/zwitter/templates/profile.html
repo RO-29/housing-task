@@ -9,6 +9,21 @@
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-2.1.1.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
   <script src="{{ STATIC_URL }}js/validate.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+ $.ajax({
+          type: "POST",
+            url: "/me_tweets/",
+            success: function(html){
+                  console.log(html)
+                }
+         })
+
+
+})
+
+</script>
 <body>
 
       {% include "fixed_navbar.html" %} 
@@ -20,9 +35,7 @@
 	<div class="row">
     
         <div class="timeline-centered">
-        {% for tweet in tweets %}
-         {{tweets}}
-        {% endfor %}
+        
         <article class="timeline-entry">
 
             <div class="timeline-entry-inner">
@@ -33,7 +46,7 @@
 
                 <div class="timeline-label">
                     <h2><a href="/profile">tweets[tweet].name </a> <span>tweets[tweet].time</span></h2>
-                    <p>tweets[tweet].msg
+                    <p></p>
                 </div>
             </div>
 

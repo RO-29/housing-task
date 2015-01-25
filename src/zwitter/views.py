@@ -34,7 +34,7 @@ def encode(password):
 #Index page , Serves as starting path for our app
 #We check if user is logged in or not ,decorator defined in auth.py
 
- 
+@csrf_exempt
 def get_tweets_me(request):
  DB =DB_Obj()
  response={} 
@@ -54,14 +54,11 @@ def get_tweets_me(request):
   tweet['name']=name
   response[i]=tweet
   i+=1
- return (json.dumps(response))
+ return HttpResponse(json.dumps(response), content_type="application/json")  
 
 @auth_check
 def profile(request):
- tweets = get_tweets_me(request)
- print tweets
- render(request,'profile.html',tweets)
-
+ return render(request,'profile.html')
 
 def test(request):
  response={}
