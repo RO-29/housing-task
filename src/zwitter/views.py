@@ -362,24 +362,37 @@ def user_profile(request,handle):
 @csrf_exempt
 @auth_check
 def follow(request):
- handle = request.GET.get('handle')
+ handle = request.POST.get('handle')
  uid = request.session['uid']
  uuid = get_uid(handle)
+ try:
+	 DB = DB_Obj()
+	 cursor = DB.cursor()
+	 query = """INSERT INTO following (since,following_id,uid_id) VALUES(%s,%s,%s)""" 
+	 params = (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),uuid,uid)
+	 cursor.execute(query,params)
+	 DB.commit()
+	 DB.close()
+ except MySQLdb.Error, e:
+                print str(e)
+                response['result'] = 'failed'
+		response['message']='Some Internal error,Try Again!'
+                return HttpResponse(json.dumps(response), content_type="application/json")
+   
 
- DB = DB_Obj()
- cursor = DB.cursor()
- query = """INSERT INTO following (since,following_id,uid_id) VALUES(%s,%s,%s)""" 
- params = (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),uuid,uid)
- cursor.execute(query,params)
- DB.commit()
- DB.close()
- DB = DB_Obj()
- cursor = DB.cursor()
- query = """INSERT INTO followers (since,follower_id,uid_id) VALUES(%s,%s,%s)""" 
- params = (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),uid,uuid)
- cursor.execute(query,params)
- DB.commit()
- DB.close()
+ try:
+	 DB = DB_Obj()
+	 cursor = DB.cursor()
+	 query = """INSERT INTO followers (since,follower_id,uid_id) VALUES(%s,%s,%s)""" 
+	 params = (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),uid,uuid)
+	 cursor.execute(query,params)
+	 DB.commit()
+	 DB.close()
+ except MySQLdb.Error, e:
+                print str(e)
+                response['result'] = 'failed'
+		response['message']='Some Internal error,Try Again!'
+                return HttpResponse(json.dumps(response), content_type="application/json")
  response={}
  response ['success']= True
  
@@ -389,7 +402,7 @@ def follow(request):
 @auth_check
 def unfollow(request):
  response={}
- handle = request.GET.get('handle')
+ handle = request.POST.get('handle')
  uid = request.session['uid']
  uuid = get_uid(handle)
 

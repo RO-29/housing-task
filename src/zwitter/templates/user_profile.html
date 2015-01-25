@@ -12,6 +12,31 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
+
+ $('#fl').click(function(){
+
+   if($('#fl').html()=="Follow")
+     url='/unfollow/'
+   else
+     url = '/follow/'
+
+   $.ajax({
+            type: "POST",
+            data:{'handle':document.URL.split('/')[4]},   
+            url: url,  
+            success: function(html){
+                  console.log(html)
+                  if($('#fl').html()=="Follow")
+                   $('#fl').html('Unfollow')
+                  else
+                   $('#fl').html('follow')
+
+             }
+
+      }) 
+
+
+ })
  $.ajax({
             type: "POST",
             data:{'user':document.URL.split('/')[4]},
