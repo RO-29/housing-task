@@ -17,11 +17,14 @@ $(document).ready(function(){
             url: "/me_tweets/",
             success: function(html){
                   console.log(html)
+                  if(html.lentgh>1)
+                       $("#not").html('')
                   for (a in html){
+ if(a!='userDetails'){
+
   $('#tl').append('<article class="timeline-entry"><div class="timeline-entry-inner"><div class="timeline-icon bg-success"><i class="entypo-feather"></i></div><div class="timeline-label"><h2><a href="/profile">'+html[a].name+' </a> <span>'+html[a].time+'</h2><p>'+html[a].msg+'</p></div></div></article>')
-           
-       
-         }
+ }
+}
         $('#followers').append(html['userDetails'].followers+" followers")
         $('#following').append(html['userDetails'].following+" following")
         $('#nm').append(html['userDetails'].name)
@@ -43,9 +46,9 @@ $(document).ready(function(){
      {% include "tweet_box.html" %}
      {% include "about.html" %}
 	<div class="row">
-    
+         <div id ="not">No Tweets</p>
         <div id = "tl" class="timeline-centered">
-        
+       
               
 
     </div>

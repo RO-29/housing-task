@@ -85,7 +85,7 @@ def get_followers(uid):
      
     DB =DB_Obj()
     cursor = DB.cursor()
-    query = 'Select * from following WHERE uid_id= %s'%uid
+    query = 'Select * from followers WHERE uid_id= %s'%uid
     cursor.execute(query)
     rows = cursor.fetchall()
     DB.commit()
@@ -115,33 +115,34 @@ def index(request):
     return render(request,'timeline.html')
 
 
-#gets Current user followers tweets for timeline and return response conataining formatted data
+
+#Gets Current user followers tweets for timeline and return response conataining formatted data
 @csrf_exempt
 def get_tweets_timeline(request):
+ response={}
  DB =DB_Obj()
  response={} 
- tweets={}
- total_followers = get_followers(rrequest.session['uid'])
+ tweets=[]
+ total_followers = get_followers(request.session['uid'])
+ print total_followers[0][1]
  for follower in total_followers:
-      tweets+=get_tweets[follower[1]]
+      tweets+=get_tweets(follower[1])
 
 
  tweets = sorted(tweets, key=lambda p: p[1], reverse=True)
  i=0
  for tweet in tweets:
-  tweet = {}
-  timestamp = str(row[1].date())+"/"+str(row[1].time())
+  resp = {}
+  timestamp = str(tweet[1].date())+"/"+str(tweet[1].time())
   name = request.session['name']
-  tweet['msg'] = row[2]
-  tweet['time']=timestamp
-  tweet['name']=name
-  response[i]=tweet
+  resp['msg'] = tweet[2]
+  resp['time']=timestamp
+  resp['name']=name
+  response[i]=resp
   i+=1
  DB.commit()
- DB.close()
- 
- return HttpResponse(json.dumps(response), content_type="application/json")  
-
+ DB.close() 
+ return HttpResponse(json.dumps(response), content_type="application/json") 
 
 #gets Current user tweets and return response conataining formatted data
 @csrf_exempt
@@ -181,22 +182,23 @@ def test(request,user_name):
  response={}
  DB =DB_Obj()
  response={} 
- tweets={}
+ tweets=[]
  total_followers = get_followers(request.session['uid'])
+ print total_followers[0][1]
  for follower in total_followers:
-      tweets+=get_tweets[follower[1]]
+      tweets+=get_tweets(follower[1])
 
 
  tweets = sorted(tweets, key=lambda p: p[1], reverse=True)
  i=0
  for tweet in tweets:
-  tweet = {}
-  timestamp = str(row[1].date())+"/"+str(row[1].time())
+  resp = {}
+  timestamp = str(tweet[1].date())+"/"+str(tweet[1].time())
   name = request.session['name']
-  tweet['msg'] = row[2]
-  tweet['time']=timestamp
-  tweet['name']=name
-  response[i]=tweet
+  resp['msg'] = tweet[2]
+  resp['time']=timestamp
+  resp['name']=name
+  response[i]=resp
   i+=1
  DB.commit()
  DB.close() 
