@@ -16,10 +16,10 @@ $(document).ready(function(){
  $('#fl').click(function(){
 
    if($('#fl').html()=="Follow")
-     url='/unfollow/'
+     url='/follow/'
    else
-     url = '/follow/'
-
+     url = '/unfollow/'
+   alert(url+"\n"+document.URL.split('/')[4])
    $.ajax({
             type: "POST",
             data:{'handle':document.URL.split('/')[4]},   
@@ -30,7 +30,7 @@ $(document).ready(function(){
                    $('#fl').html('Unfollow')
                   else
                    $('#fl').html('follow')
-
+                  document.location=document.url
              }
 
       }) 

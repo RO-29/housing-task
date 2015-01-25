@@ -11,7 +11,27 @@
   <script src="{{ STATIC_URL }}js/validate.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+ $('#fl').click(function(){
+ if($('#fl').html()=="Follow")
+     url='/follow/'
+   else
+     url = '/unfollow/'
+   alert(url+"\n"+document.URL.split('/')[3])
+   $.ajax({
+            type: "POST",
+            data:{'handle':document.URL.split('/')[3]},   
+            url: url,  
+            success: function(html){
+                  console.log(html)
+                  if($('#fl').html()=="Follow")
+                   $('#fl').html('Unfollow')
+                  else
+                   $('#fl').html('follow')
+                  document.location=document.url
+             }
 
+      }) 
+})
  $.ajax({
             type: "POST",
             url: "/list/?get=followers&handle="+document.URL.split('/')[3],
