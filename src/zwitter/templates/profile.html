@@ -17,6 +17,14 @@ $(document).ready(function(){
             url: "/me_tweets/",
             success: function(html){
                   console.log(html)
+                  for (a in html){
+
+
+  $('#tl').append('<article class="timeline-entry"><div class="timeline-entry-inner"><div class="timeline-icon bg-success"><i class="entypo-feather"></i></div><div class="timeline-label"><h2><a href="/profile">'+html[a].name+' </a> <span>'+html[a].time+'</h2><p>'+html[a].msg+'</p></div></div></article>')
+
+            
+
+         }
                 }
          })
 
@@ -34,24 +42,9 @@ $(document).ready(function(){
 
 	<div class="row">
     
-        <div class="timeline-centered">
+        <div id = "tl" class="timeline-centered">
         
-        <article class="timeline-entry">
-
-            <div class="timeline-entry-inner">
-
-                <div class="timeline-icon bg-success">
-                    <i class="entypo-feather"></i>
-                </div>
-
-                <div class="timeline-label">
-                    <h2><a href="/profile">tweets[tweet].name </a> <span>tweets[tweet].time</span></h2>
-                    <p></p>
-                </div>
-            </div>
-
-        </article>
-        
+              
 
     </div>
 
