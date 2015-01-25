@@ -14,31 +14,30 @@ $(document).ready(function(){
 
  $.ajax({
             type: "POST",
-            url: "/list?get=followers&handle="+document.URL.split('/')[3],
+            url: "/list/?get=followers&handle="+document.URL.split('/')[3],
             success: function(html){
                   console.log(html)
-                 //alert(0 in html)
-                  if(0 in html)
-                   $("#not").html('')
-                  for (a in html){
- if(a!='userDetails'){
-    str = '<li><div class="listrap-toggle"><span></span><img src="http://lorempixel.com/60/60/people/?v=1" class="img-circle"/></div>'
-    str+='<strong>'+html[a].name+' (<u>'+html[a].handle+'</u>)</strong></li>'
-  
-  $('#list').append(str)
- }
-}
+        $("#list").append('<a href="/'+html['userDetails'].handle+'/followers/"><p><span id="followers" class="label label-info"></span> </a><a href="/'+html['userDetails'].handle+'/following/"><span id="following" class="label label-warning"></span></a></p>')
         $('#followers').append(html['userDetails'].followers+" followers")
         $('#following').append(html['userDetails'].following+" following")
-        $('#nm').append(html['userDetails'].name)
+        $('#nm').append(html['userDetails'].name+ " (<u>"+html['userDetails'].handle+"</u>)")
         $('#bio').append(html['userDetails'].about)
         $('#total').append(html['userDetails'].count+" tweets")
         if (html['userDetails'].fl_u==true)
           $('#fl').append("UnFollow")
         else
          $('#fl').append("Follow")
-   
-                } 
+                 //alert(0 in html)
+                  if(0 in html)
+                   $("#not").html('Your Followers,Click on name to go to their profile')
+                  for (a in html){
+ if(a!='userDetails'){
+    str = '<a href="/user/'+html[a].handle+'/"> <li><div class="listrap-toggle"><span></span><img src="{{ STATIC_URL }}user.jpg" class="img-circle"'
+    str+='</div><strong>'+html[a].name+'</strong></li></a>'
+   $('#fll').append(str)
+ }
+}
+} 
          })
 })
 
@@ -50,8 +49,8 @@ $(document).ready(function(){
      {% include "about.html" %}
 	
 	<div class="row">
-       <div id ="not">No one here :/</div>
-	<ul id="list" class="listrap">
+        <div id ="not">No one here :/</div>
+	<ul id="fll" class="listrap">
         </ul>
 	</div>
 </div>

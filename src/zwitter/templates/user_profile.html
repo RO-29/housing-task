@@ -26,7 +26,7 @@ $(document).ready(function(){
 
   $('#tl').append('<article class="timeline-entry"><div class="timeline-entry-inner"><div class="timeline-icon bg-success"><i class="entypo-feather"></i></div><div class="timeline-label"><h2><a href="/profile">'+html[a].name+' </a> <span>'+html[a].time+'</h2><p>'+html[a].msg+'</p></div></div></article>')
  }
-}
+}               $("#list").append('<a href="/'+html['userDetails'].handle+'/followers/"><p><span id="followers" class="label label-info"></span> </a><a href="/'+html['userDetails'].handle+'/following/"><span id="following" class="label label-warning"></span></a></p>')
         $('#followers').append(html['userDetails'].followers+" followers")
         $('#following').append(html['userDetails'].following+" following")
         $('#nm').append(html['userDetails'].name)
