@@ -248,7 +248,7 @@ def other_user(request):
 #######################################################################
 
 
-#gets Current user tweets and return response conataining formatted data
+#gets Current user tweets and return response containing formatted data
 @csrf_exempt
 def get_tweets_me(request):
  DB =DB_Obj()
@@ -271,7 +271,11 @@ def get_tweets_me(request):
   i+=1
  DB.commit()
  DB.close()
- response['userDetails']={'name':request.session['name'],'about':request.session['about'],'followers':request.session['followers'],'following':request.session['following'],'count':request.session['tweet_count'],'handle':request.session['handle']}
+ followers_count= get_followers_count(request.session['uid'])
+ following_count = get_following_count(request.session['uid'])
+ #pdb.set_trace()
+ response['userDetails']={'name':request.session['name'],'about':request.session['about'],'following':following_count,'followers':followers_count,'count':get_tweet_count(request.session['uid']),'handle':request.session['handle']}
+ 
  return HttpResponse(json.dumps(response), content_type="application/json")  
 
 #######################################################################
@@ -391,13 +395,13 @@ def unfollow(request):
 
  DB = DB_Obj()
  cursor = DB.cursor()
- query = "DELETE FROM following WHERE uuid='%s' AND uid='%s'"%(uuid,uid) 
+ query = "DELETE FROM following WHERE following_id='%s' AND uid_id='%s'"%(uuid,uid) 
  cursor.execute(query)
  DB.commit()
  DB.close()
  DB = DB_Obj()
  cursor = DB.cursor()
- query = "DELETE FROM followers WHERE uuid='%s' AND uid='%s'"%(uuid,uid) 
+ query = "DELETE FROM followers WHERE follower_id='%s' AND uid_id='%s'"%(uuid,uid) 
  cursor.execute(query)
  DB.commit()
  DB.close()
