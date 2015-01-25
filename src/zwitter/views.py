@@ -36,14 +36,17 @@ def encode(password):
 
 
 def test(request):
- #DB =DB_Obj()
- #cursor = DB.cursor()
- #cursor.execute(query,args)
+ DB =DB_Obj()
+ cursor = DB.cursor()
+ query = 'Select * from tweets'
+ cursor.execute(query)
+ rows = cursor.fetchall()
+ print rows
  response={} 
- #DB.commit()
- #DB.close()
+ DB.commit()
+ DB.close()
  response['result']=True
- return HttpResponse(json.dumps(response), content_type="application/json")  
+ return HttpResponse(json.dumps(rows), content_type="application/json")  
 
 @auth_check
 def index(request):

@@ -58,12 +58,14 @@
  </script>
 <div class="container">
 	<div class="row">
-            <form id="tweetform" accept-charset="UTF-8" action="" method="POST">
-                <textarea class="span4" id="tweet" name="tweet"
-                placeholder="Type in your message" rows="5"></textarea>
-                160 characters Allowed
-                <br><button class="btn btn-info" value ="tweet "type="submit">Post New Message</button>
-                <span id= "tweet_result" style="margin-left:8px;"></span>                                     </div>
+		<div class="span4 well" style="padding-bottom:0">
+            <form accept-charset="UTF-8" id="tweetform" action="" method="POST">
+                <textarea  class="span10" id="tweet" name="tweet"
+                placeholder="Type in your message" rows="3" columns="20"></textarea>
+                160 characters allowed
+                <br><button class="btn btn-info" value="tweet" type="submit">Tweet</button>
+                <span id= "tweet_result" style="margin-left:8px;"></span>  
             </form>
+        </div>
 	</div>
 </div>

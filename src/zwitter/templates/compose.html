@@ -69,15 +69,19 @@
  </script>
 </head>
 <body>
-
-	<div class="row">
-            <form id="tweetform" accept-charset="UTF-8" action="" method="POST">
-                <textarea class="span4" id="tweet" name="tweet"
+<div class="container">
+		<div class="row">
+		<div class="span4 well" style="padding-bottom:0">
+            <form accept-charset="UTF-8" action="" method="POST">
+                <textarea class="span4" id="new_message" name="new_message"
                 placeholder="Type in your message" rows="5"></textarea>
-                160 characters Allowed
-                <br><button class="btn btn-info" value ="tweet "type="submit">Post New Message</button>
-                <span id= "tweet_result" style="margin-left:8px;"></span>                                     </div>
+                <h6 class="pull-left">160 characters allowed</h6>
+                <br><button class="btn btn-info" value="tweet" type="submit">Post New Message</button>
+                <span id= "result_login" style="margin-left:8px;"></span>  
             </form>
+        </div>
 	</div>
+</div>
+
 </body>
 </html>
