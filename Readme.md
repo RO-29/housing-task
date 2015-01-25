@@ -15,7 +15,11 @@ RUNNING
 
 >python mange.py runserver (make sure port 8000 is free else run >python manage.py migrate PORT_NO)
 
-**Note If Databse tabels don't show up or python manage.py migrate fails, import schema.sql in your databse
+>Go to http://localhost:8000
+
+**Note If Database tabels don't show up or python manage.py migrate fails, import schema.sql in your databse
+
+**Also read the note.md file for used library
 
 
 Problem_statement

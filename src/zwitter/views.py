@@ -43,6 +43,7 @@ def encode(password):
 ######################################################################
 
 
+#returns the tweet count of given uid
 def get_tweet_count(uid):
     DB =DB_Obj()
     cursor = DB.cursor()
@@ -53,6 +54,7 @@ def get_tweet_count(uid):
     DB.close()
     return rows[0] 
 
+#returns the followers count of given uid
 def get_followers_count(uid):
  
     DB =DB_Obj()
@@ -64,6 +66,7 @@ def get_followers_count(uid):
     DB.close()
     return rows[0] 
 
+#returns the following count of given uid
 def get_following_count(uid):
      
     DB =DB_Obj()
@@ -75,6 +78,7 @@ def get_following_count(uid):
     DB.close()
     return rows[0] 
 
+#returns the following list of given uid 
 def get_following(uid):
      
     DB =DB_Obj()
@@ -86,6 +90,7 @@ def get_following(uid):
     DB.close()
     return rows
 
+#returns the followers list of given uid
 def get_followers(uid):
      
     DB =DB_Obj()
@@ -97,6 +102,7 @@ def get_followers(uid):
     DB.close()
     return rows 
 
+#returns the zwitter Handle of given uid
 def get_handle(uid):
     DB =DB_Obj()
     cursor = DB.cursor()
@@ -107,6 +113,7 @@ def get_handle(uid):
     DB.close()
     return rows
 
+#Returns the uid of gven zwitter handle
 def get_uid(handle):
      
     DB =DB_Obj()
@@ -118,6 +125,7 @@ def get_uid(handle):
     DB.close()
     return rows[0][0]
 
+#Returns the user object of given UID
 def get_user(uid):
     DB =DB_Obj()
     cursor = DB.cursor()
@@ -128,6 +136,7 @@ def get_user(uid):
     DB.close()
     return rows
 
+#check if given uid is foolowing logged in user
 def follows_u(request,uid):
     DB =DB_Obj()
     cursor = DB.cursor()
@@ -141,6 +150,7 @@ def follows_u(request,uid):
     else:
         return False
 
+#check if  logged in user is following given uid
 def u_follow(request,uid):
     DB =DB_Obj()
     cursor = DB.cursor()
@@ -154,6 +164,7 @@ def u_follow(request,uid):
     else:
         return False
 
+#Get All tweets of given uid
 def get_tweets(uid):
      
     DB =DB_Obj()
@@ -173,15 +184,13 @@ def get_tweets(uid):
 
 #Index page , Serves as starting path for our app
 #We check if user is logged in or not ,decorator defined in auth.py
-
 @auth_check
 def index(request):
     return render(request,'timeline.html')
 #######################################################################
 
 
-#Gets tweets for logged in user timeline from his/her followers tweets
-
+#Gets tweets for logged in user timeline from his/her followers
 @csrf_exempt
 def get_tweets_timeline(request):
  response={}
@@ -191,11 +200,13 @@ def get_tweets_timeline(request):
  for follower in total_followers:
       tweets+=get_tweets(follower[1])
 
+ #Sort the tweets in reverse order , recent tweets first
  tweets = sorted(tweets, key=lambda p: p[1], reverse=True)
  i=0
  for tweet in tweets:
   resp = {}
   user_info = get_handle(tweet[3])[0]
+  #we create the response object of tweet to return in JSON Object
   timestamp = str(tweet[1].time())+"  "+str(tweet[1].date())
   name = user_info[1]+" "+user_info[2]
   resp['msg'] = tweet[2]
@@ -208,7 +219,7 @@ def get_tweets_timeline(request):
 
 #######################################################################
 
-#tweets and profile info of user which is not the logged in user
+#tweets and profile info of general user other than the logged-in-user
 @csrf_exempt
 def other_user(request):
    DB = DB_Obj()
@@ -238,6 +249,8 @@ def other_user(request):
    #pdb.set_trace()
    following_count = get_following_count(uid) 
    followers_count = get_followers_count(uid)
+
+   #we check if other_user is same as logged-in user
    if uid==request.session['uid']:
       current_user=True
    else:
@@ -248,7 +261,7 @@ def other_user(request):
 #######################################################################
 
 
-#gets Current user tweets and return response containing formatted data
+#gets logged in user tweets and return response containing formatted data
 @csrf_exempt
 def get_tweets_me(request):
  DB =DB_Obj()
@@ -258,6 +271,7 @@ def get_tweets_me(request):
  query = 'Select * from tweets WHERE uid_id= %s'%request.session['uid']
  cursor.execute(query)
  rows = cursor.fetchall()
+ #reversed recent tweets
  rows = sorted(rows, key=lambda p: p[1], reverse=True)
  i=0
  for row in rows:
@@ -281,20 +295,22 @@ def get_tweets_me(request):
 #######################################################################
 
 
-#Renders profile page of current user
+#Renders profile page of logged-in user
 @auth_check
 def profile(request):
  return render(request,'profile.html')
 
 #######################################################################
 
-#Anonumous function, used for testing
+#Anonomous function, used for testing
 def test(request):
  response={}
  return HttpResponse(json.dumps(response), content_type="application/json") 
 
 #######################################################################
 
+
+#It returns the foolowers or following list count, dependiing on the argument of get(followers or following)
 @csrf_exempt
 def list_(request): 
    response={}
@@ -327,19 +343,28 @@ def list_(request):
 
 #######################################################################
 
+#returns the followers page for user
 @auth_check
 def followers_render(request,handle):
   return render(request,'followers.html')
 
 #######################################################################
+
+#returns the following page for user
 @auth_check
 def following_render(request,handle):
   return render(request,'following.html')
 #######################################################################
+
+#returns the home page,ie TIMELINE
 @auth_check
 def home(request):
     return render(request,'timeline.html')
+
+
 #######################################################################
+
+#Check login
 def check_login(request):
     if(request.session.get('logged',True)):
        print 'Already logged in'
@@ -348,17 +373,23 @@ def check_login(request):
       return False
 ####################################################################### 
 
-#Login_signup form ,renders login and signup page if user is not logged in
+#renders the login and signup page if user is not logged in
 def login_signup(request):
    if (check_login(request)==False):
     return render(request,'login.html')
    else:
     return HttpResponseRedirect('/')
+############################################
 
+#retrns the logged in user profile page
 @auth_check
 def user_profile(request,handle):
     return render(request,'user_profile.html')
 
+#############################################
+
+
+#Follow new user on request of logged in  user
 @csrf_exempt
 @auth_check
 def follow(request):
@@ -368,6 +399,7 @@ def follow(request):
  try:
 	 DB = DB_Obj()
 	 cursor = DB.cursor()
+         #Update the following table
 	 query = """INSERT INTO following (since,following_id,uid_id) VALUES(%s,%s,%s)""" 
 	 params = (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),uuid,uid)
 	 cursor.execute(query,params)
@@ -383,6 +415,7 @@ def follow(request):
  try:
 	 DB = DB_Obj()
 	 cursor = DB.cursor()
+         #Update the followers table
 	 query = """INSERT INTO followers (since,follower_id,uid_id) VALUES(%s,%s,%s)""" 
 	 params = (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),uid,uuid)
 	 cursor.execute(query,params)
@@ -398,6 +431,11 @@ def follow(request):
  
  return HttpResponse(json.dumps(response), content_type="application/json")
 
+
+###############################################
+
+
+#Unfollow the user for current user
 @csrf_exempt
 @auth_check
 def unfollow(request):
@@ -421,7 +459,9 @@ def unfollow(request):
  response ['success']= True
  
  return HttpResponse(json.dumps(response), content_type="application/json")
+##############################################################
 
+#Composed tweet ,stored in Database
 @csrf_exempt
 @auth_check
 def tweet_post(request):
@@ -458,6 +498,9 @@ def tweet_post(request):
 
 
 
+###############################################
+
+#user Login
 @csrf_exempt
 def login_process(request):
   
@@ -517,7 +560,9 @@ def login_process(request):
       response['message']='Not a valid post request'
       return HttpResponse(json.dumps(response), content_type="application/json")     
 
+##################################################
 
+#logout the logged in user
 def logout(request):
 
     request.session.flush()
