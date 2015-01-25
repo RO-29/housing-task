@@ -31,9 +31,119 @@ def salt():
 def encode(password):
         return hashlib.md5(salt() + password).hexdigest()
 
+
+
+##########################################################
+#Helper functions to query Databse
+##########################################################
+
+
+def get_tweet_count(uid):
+    DB =DB_Obj()
+    cursor = DB.cursor()
+    query = 'Select count(*) from tweets WHERE uid_id= %s'% uid
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    DB.commit()
+    DB.close()
+    return rows[0] 
+
+def get_followers_count(uid):
+ 
+    DB =DB_Obj()
+    cursor = DB.cursor()
+    query = 'Select count(*) from followers WHERE uid_id= %s'%uid
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    DB.commit()
+    DB.close()
+    return rows[0] 
+
+def get_following_count(uid):
+     
+    DB =DB_Obj()
+    cursor = DB.cursor()
+    query = 'Select count(*) from following WHERE uid_id= %s'%uid
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    DB.commit()
+    DB.close()
+    return rows[0] 
+
+def get_following(uid):
+     
+    DB =DB_Obj()
+    cursor = DB.cursor()
+    query = 'Select * from following WHERE uid_id= %s'%uid
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    DB.commit()
+    DB.close()
+    return rows
+
+def get_followers(uid):
+     
+    DB =DB_Obj()
+    cursor = DB.cursor()
+    query = 'Select * from following WHERE uid_id= %s'%uid
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    DB.commit()
+    DB.close()
+    return rows 
+
+def get_tweets(uid):
+     
+    DB =DB_Obj()
+    cursor = DB.cursor()
+    query = 'Select * from tweets WHERE uid_id= %s'%uid
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    DB.commit()
+    DB.close()
+    return rows
+
+##########################################################
+#End Of helper functions to query Databse
+##########################################################
+
+
 #Index page , Serves as starting path for our app
 #We check if user is logged in or not ,decorator defined in auth.py
+@auth_check
+def index(request):
+    return render(request,'timeline.html')
 
+
+#gets Current user followers tweets for timeline and return response conataining formatted data
+@csrf_exempt
+def get_tweets_timeline(request):
+ DB =DB_Obj()
+ response={} 
+ tweets={}
+ total_followers = get_followers(rrequest.session['uid'])
+ for follower in total_followers:
+      tweets+=get_tweets[follower[1]]
+
+
+ tweets = sorted(tweets, key=lambda p: p[1], reverse=True)
+ i=0
+ for tweet in tweets:
+  tweet = {}
+  timestamp = str(row[1].date())+"/"+str(row[1].time())
+  name = request.session['name']
+  tweet['msg'] = row[2]
+  tweet['time']=timestamp
+  tweet['name']=name
+  response[i]=tweet
+  i+=1
+ DB.commit()
+ DB.close()
+ 
+ return HttpResponse(json.dumps(response), content_type="application/json")  
+
+
+#gets Current user tweets and return response conataining formatted data
 @csrf_exempt
 def get_tweets_me(request):
  DB =DB_Obj()
@@ -54,20 +164,46 @@ def get_tweets_me(request):
   tweet['name']=name
   response[i]=tweet
   i+=1
+ DB.commit()
+ DB.close()
+ response['userDetails']={'name':request.session['name'],'about':request.session['about'],'followers':request.session['followers'],'following':request.session['following'],'count':request.session['tweet_count']}
  return HttpResponse(json.dumps(response), content_type="application/json")  
 
+
+#Renders profile page of current user
 @auth_check
 def profile(request):
  return render(request,'profile.html')
 
+
+#Anonumous function, used for testing
 def test(request,user_name):
  response={}
- response[1]=user_name
- return HttpResponse(json.dumps(response), content_type="application/json")  
+ DB =DB_Obj()
+ response={} 
+ tweets={}
+ total_followers = get_followers(request.session['uid'])
+ for follower in total_followers:
+      tweets+=get_tweets[follower[1]]
 
-@auth_check
-def index(request):
-    return render(request,'timeline.html')
+
+ tweets = sorted(tweets, key=lambda p: p[1], reverse=True)
+ i=0
+ for tweet in tweets:
+  tweet = {}
+  timestamp = str(row[1].date())+"/"+str(row[1].time())
+  name = request.session['name']
+  tweet['msg'] = row[2]
+  tweet['time']=timestamp
+  tweet['name']=name
+  response[i]=tweet
+  i+=1
+ DB.commit()
+ DB.close() 
+ return HttpResponse(json.dumps(response), content_type="application/json") 
+
+
+
 
 @auth_check
 def home(request):
@@ -81,7 +217,7 @@ def check_login(request):
       return False
  
 
-#Login_signup form html
+#Login_signup form ,renders login and signup page if user is not logged in
 def login_signup(request):
    if (check_login(request)==False):
     return render(request,'login.html')
@@ -161,6 +297,9 @@ def login_process(request):
                    request.session['handle']= str(rows[4])
                    request.session['about']= str(rows[6])
                    request.session['logged'] = True
+                   request.session['followers']= get_followers_count(request.session['uid'])
+                   request.session['following']= get_following_count(request.session['uid'])
+                   request.session['tweet_count']= get_tweet_count(request.session['uid'])
                    response['result'] = 'Success'
                    response['message']='Auth Done!,redirecting'
                 else:
