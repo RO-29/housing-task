@@ -365,13 +365,13 @@ def tweet_post(request):
  if request.method=='POST':
     date = datetime.datetime.now()
     tweet = str(request.POST.get('tweet'))
-
+    #pdb.set_trace()
     try:
 
          DB = DB_Obj() 
          cursor = DB.cursor()
          query = """INSERT INTO tweets (posted,tweet,uid_id) VALUES(%s,%s,%s)""" 
-         params = (datetime.datetime.now().strftime(' %H:%M:%S %d-%m-%Y'),tweet,int(request.session['uid']))
+         params = (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),tweet,int(request.session['uid']))
          cursor.execute(query,params)
          DB.commit()
 	 DB.close()
