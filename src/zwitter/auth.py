@@ -3,11 +3,8 @@ from django.shortcuts import render, redirect
 import json
 import pdb
 
-#============================================================================#
-# Checks whether user is logged in or not, if not , redirects to login page  #
-#============================================================================#
 
-# The above #=# boxes are fun to make
+#User redirected to login page if not logged in
 
 def login_required(f):
     
@@ -24,4 +21,3 @@ def login_required(f):
     wrap.__name__ = f.__name__
     return wrap
 
-# Do study about *args,**kwargs, wraps etc. etc.
