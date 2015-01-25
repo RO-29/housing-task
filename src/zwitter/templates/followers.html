@@ -23,9 +23,9 @@ $(document).ready(function(){
         $('#nm').append(html['userDetails'].name+ " (<u>"+html['userDetails'].handle+"</u>)")
         $('#bio').append(html['userDetails'].about)
         $('#total').append(html['userDetails'].count+" tweets")
-        if (html['userDetails'].fl_u==true)
+        if (html['userDetails'].fl_u==true && html['userDetails'].cr==false)
           $('#fl').append("UnFollow")
-        else
+        else if(html['userDetails'].cr==false)
          $('#fl').append("Follow")
                  //alert(0 in html)
                   if(0 in html)

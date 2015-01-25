@@ -32,9 +32,9 @@ $(document).ready(function(){
         $('#nm').append(html['userDetails'].name)
         $('#bio').append(html['userDetails'].about)
         $('#total').append(html['userDetails'].count+" tweets")
-        if (html['userDetails'].fl_u==true)
-          $('#fl').append("UnFollow")
-        else
+        if (html['userDetails'].u_fl==true && html['userDetails'].cr==false)
+          $('#fl').append("Unfollow")
+        else if(html['userDetails'].cr==false)
          $('#fl').append("Follow")
    
                 } 

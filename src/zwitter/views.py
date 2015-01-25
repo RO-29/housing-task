@@ -238,8 +238,11 @@ def other_user(request):
    #pdb.set_trace()
    following_count = get_following_count(uid) 
    followers_count = get_followers_count(uid)
-   
-   response['userDetails']={'name':user[1]+" "+user[2],'about':user[6],'followers':followers_count,'following':following_count,'count':get_tweet_count(uid),'handle':handle,"fl_u":1}#u_follow(request,uid)}
+   if uid==request.session['uid']:
+      current_user=True
+   else:
+      current_user=False
+   response['userDetails']={'name':user[1]+" "+user[2],'about':user[6],'followers':followers_count,'following':following_count,'count':get_tweet_count(uid),'handle':handle,"u_fl":u_follow(request,uid),"fl_u":follows_u(request,uid),'cr':current_user}
    return HttpResponse(json.dumps(response), content_type="application/json")  
 
 #######################################################################
@@ -311,7 +314,11 @@ def list_(request):
    following_count = get_following_count(uid) 
    followers_count = get_followers_count(uid)
    
-   response['userDetails']={'name':user[1]+" "+user[2],'about':user[6],'followers':followers_count,'following':following_count,'count':get_tweet_count(uid),'handle':handle,"fl_u":u_follow(request,uid)}
+   if uid==request.session['uid']:
+      current_user=True
+   else:
+      current_user=False
+   response['userDetails']={'name':user[1]+" "+user[2],'about':user[6],'followers':followers_count,'following':following_count,'count':get_tweet_count(uid),'handle':handle,"u_fl":u_follow(request,uid),"fl_u":follows_u(request,uid),'cr':current_user}
    return HttpResponse(json.dumps(response), content_type="application/json") 
 
 #######################################################################
