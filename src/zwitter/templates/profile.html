@@ -21,6 +21,8 @@
     
         <div class="timeline-centered">
         {% for tweet in tweets %}
+         {{tweets}}
+        {% endfor %}
         <article class="timeline-entry">
 
             <div class="timeline-entry-inner">
@@ -30,13 +32,13 @@
                 </div>
 
                 <div class="timeline-label">
-                    <h2><a href="/profile">{{ tweets[tweet].name }}</a> <span>{{tweets[tweet].time}}</span></h2>
-                    <p>{{tweets[tweet].msg}}
+                    <h2><a href="/profile">tweets[tweet].name </a> <span>tweets[tweet].time</span></h2>
+                    <p>tweets[tweet].msg
                 </div>
             </div>
 
         </article>
-        {% endfor %}
+        
 
     </div>
 
