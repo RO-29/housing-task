@@ -14,8 +14,7 @@ $(document).ready(function(){
 
  $.ajax({
             type: "POST",
-            data:{'user':document.URL.split('/')[3]},
-            url: "/other_user/",
+            url: "/list?get=followers&handle="+document.URL.split('/')[3],
             success: function(html){
                   console.log(html)
                  //alert(0 in html)
@@ -23,9 +22,10 @@ $(document).ready(function(){
                    $("#not").html('')
                   for (a in html){
  if(a!='userDetails'){
-
- 
-  $('#tl').append('<article class="timeline-entry"><div class="timeline-entry-inner"><div class="timeline-icon bg-success"><i class="entypo-feather"></i></div><div class="timeline-label"><h2><a href="/profile">'+html[a].name+' </a> <span>'+html[a].time+'</h2><p>'+html[a].msg+'</p></div></div></article>')
+    str = '<li><div class="listrap-toggle"><span></span><img src="http://lorempixel.com/60/60/people/?v=1" class="img-circle"/></div>'
+    str+='<strong>'+html[a].name+' (<u>'+html[a].handle+'</u>)</strong></li>'
+  
+  $('#list').append(str)
  }
 }
         $('#followers').append(html['userDetails'].followers+" followers")
@@ -50,42 +50,8 @@ $(document).ready(function(){
      {% include "about.html" %}
 	
 	<div class="row">
-		<ul class="listrap">
-            <li>
-                <div class="listrap-toggle">
-                    <span></span>
-                    <img src="http://lorempixel.com/60/60/people/?v=1" class="img-circle" />
-                </div>
-                <strong>My Lorem Option #1</strong>
-            </li>
-            <li class="active">
-                <div class="listrap-toggle">
-                    <span></span>
-                    <img src="http://lorempixel.com/60/60/people/?v=2" class="img-circle" />
-                </div>
-                <strong>Your Ipsum Option #2</strong>
-            </li>
-            <li class="active">
-                <div class="listrap-toggle">
-                    <span></span>
-                    <img src="http://lorempixel.com/60/60/people/?v=3" class="img-circle" />
-                </div>
-                <strong>Their Consectuer Option #3</strong>
-            </li>
-            <li>
-                <div class="listrap-toggle">
-                    <span></span>
-                    <img src="http://lorempixel.com/60/60/people/?v=4" class="img-circle" />
-                </div>
-                <strong>His Adjascent Option #4</strong>
-            </li>
-            <li class="active">
-                <div class="listrap-toggle">
-                    <span></span>
-                    <img src="http://lorempixel.com/60/60/people/?v=5" class="img-circle" />
-                </div>
-                <strong>Her Split Option #5</strong>
-            </li>
+       <div id ="not">No one here :/</div>
+	<ul id="list" class="listrap">
         </ul>
 	</div>
 </div>

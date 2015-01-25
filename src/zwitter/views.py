@@ -279,6 +279,27 @@ def test(request):
  return HttpResponse(json.dumps(rows), content_type="application/json") 
 
 
+def list_(request): 
+   response={}
+   get = request.GET.get('get')
+   handle = request.GET.get('handle')
+   uid = get_uid(handle)
+   if get=='followers':
+    res = get_followers(uid)
+   else:
+    res = get_following(uid)
+
+
+   i=0
+   users={}
+   for user in res:
+       u = get_user(user[3])
+       print u
+       if u:
+        users['name']=u[1]+" "+u[2]
+        users['handle']=u[4]
+        response[i]=users
+   return HttpResponse(json.dumps(response), content_type="application/json") 
 
 @auth_check
 def followers_render(request,handle):
