@@ -10,18 +10,18 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-from local_settings import *
+from config import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 #SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
-#TEMPLATE_DIRS = (
+TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
- #   os.path.join(SITE_ROOT, 'templates/')
-#)
+    os.path.join(SITE_ROOT, 'templates/')
+)
 
 
 
@@ -73,10 +73,10 @@ WSGI_APPLICATION = 'zwitter.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': MYSQL_DATABASE,
-        'USER': MYSQL_USERNAME,
-        'PASSWORD': MYSQL_PASSWORD,
-        'HOST': MYSQL_HOST,
+        'NAME': DATABASE,
+        'USER': USERNAME,
+        'PASSWORD': PASSWORD,
+        'HOST': HOST,
     }
 }
 
