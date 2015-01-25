@@ -1,0 +1,61 @@
+{% load static from staticfiles %}
+<!DOCTYPE HTML>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}stylesheets/style.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}stylesheets/bootstrap-min.css">
+<script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery-2.1.1.min.js"></script>
+<script type="text/javascript">
+  
+  function submit_form (user_id) {
+    console.log("Form Submitted");
+    console.log(user_id);
+    
+    $.ajax({
+      type:"POST",
+      url:"/add_follower/",
+      data:{
+        'user_to_follow':user_id
+      },
+      success: function(result) {
+        if(result) {
+          console.log(result);
+          if(result['status'] == 'success') {
+            //$("'#"+user_id+"'").css('color':'red'); // Change Color
+            console.log('followed');
+            window.location.replace("/all/");
+          }
+        } else {
+          console.log('prob with ajax request');
+        }
+      }
+    });
+  }
+
+</script>
+<body>
+  <title>Garuda</title>
+{% include "header.html" %}
+  <div  class="container">
+  <h1>Welcome</h1>
+  <p>
+    Your user details are - 
+    <br>
+    Your handle is {{ user_handle }}
+  </p>
+  <div class="users">
+    {% for user in users %}
+        <div class="tweet-home">
+          <a href="/user/{{ user.user_handle }}/">{{ user.user_handle}}</a> {{ user.user_name }} - 
+          {% if user.follow %}
+          <button id="{{ user.user_id }}" onclick="submit_form(this.id)" class="btn btn-success" id="disabled-btn" style="background-color:gray !important; margin-left:5px; margin-top:-3px;" disabled>Followed</button>
+          {% else %}
+          <button id="{{ user.user_id }}" onclick="submit_form(this.id)" class="btn btn-success">Follow</button>
+          {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+</body>
+</html>
+<!--
+    Each time a tweet will be posted, the page should reload,
+-->

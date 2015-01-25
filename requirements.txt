@@ -1,0 +1,17 @@
+Django==1.7
+
+requests==2.2.1
+
+argparse==1.2.1
+
+httplib2==0.9
+
+simplejson==3.4.1
+
+wsgiref==0.1.2
+
+
+simplemysql
+
+
+MySQL-python==1.2.5

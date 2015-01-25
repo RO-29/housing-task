@@ -1,0 +1,39 @@
+{% load static from staticfiles %}
+<!DOCTYPE HTML>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}stylesheets/style.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}stylesheets/bootstrap-min.css">
+<script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery-2.1.1.min.js"></script>
+<script type="text/javascript">
+  
+  function submit_form () {
+    console.log("Form Submitted");
+    
+
+</script>
+<body>
+  <title>Garuda</title>
+  {% include "header.html" %}
+  <div class="container">
+  <h1>{{ search_term }}</h1>
+  <div class="tweet-container">
+      <div id="user-tweets">
+          <!-- A for loop which shows all the tweets of the user-->
+          {% if tweets %}
+            {% for tweet in tweets %}
+            <p class="tweet-home">
+            {{ tweet.tweet }}<br><br>
+              by <a href="#">{{ tweet.user_handle }}</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ tweet.post_time }}<br>
+            </p>
+            <br>
+            {% endfor %}
+          {% else %}
+          <p>No tweets posted</p>
+          {% endif %}
+      </div>
+  </div>
+</div>
+</body>
+</html>
+<!--
+    Each time a tweet will be posted, the page should reload,
+-->
