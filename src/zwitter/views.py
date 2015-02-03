@@ -195,10 +195,10 @@ def index(request):
 def get_tweets_timeline(request):
  response={}
  tweets=[]
- total_followers = get_followers(request.session['uid'])
+ total_following = get_following(request.session['uid'])
 
- for follower in total_followers:
-      tweets+=get_tweets(follower[1])
+ for following in total_following:
+      tweets+=get_tweets(following[1])
 
  #Sort the tweets in reverse order , recent tweets first
  tweets = sorted(tweets, key=lambda p: p[1], reverse=True)
